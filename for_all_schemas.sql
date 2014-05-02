@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE FUNCTION for_all_schema(raw_query text) RETURNS integer AS $$
+﻿CREATE OR REPLACE FUNCTION for_all_schemas(raw_query text) RETURNS integer AS $$
 DECLARE 
 final_statement text;
   all_schema_query text;
@@ -22,6 +22,7 @@ BEGIN
       || 'q.* FROM ('
 	    || raw_query
 	    || ') AS q';
+    EXECUTE 'SET search_path = ' || schema.schema_name;
     EXECUTE final_statement;
   END LOOP;
 
@@ -38,11 +39,7 @@ BEGIN
 END;$$ LANGUAGE plpgsql;
 
 -- example usage
-select for_all_schema('SELECT * FROM badge_types LIMIT 10'); select * from temptable;
+select for_all_schemas('SELECT * FROM badge_types WHERE id = 1915 LIMIT 10'); select * from temptable;
 
 -- PERFORM for any statements that don't return anything
 -- can to cast results
-
-
-
-
