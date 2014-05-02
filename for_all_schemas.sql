@@ -14,7 +14,7 @@ BEGIN
   DISCARD TEMP;
 
   -- get all the schemas
-  FOR schema IN SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'public' OR schema_name LIKE 'account_%'
+  FOR schema IN SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'public' OR schema_name LIKE '%account_%'
   LOOP
     schema_names := array_append(schema_names, CAST(schema.schema_name AS text));
     final_statement := 'CREATE TEMPORARY TABLE ' || schema.schema_name || '_temptable AS '
