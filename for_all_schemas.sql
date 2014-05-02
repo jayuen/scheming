@@ -39,7 +39,8 @@ BEGIN
 END;$$ LANGUAGE plpgsql;
 
 -- example usage
-select for_all_schemas('SELECT * FROM badge_types WHERE id = 1915 LIMIT 10'); select * from temptable;
+SELECT for_all_schemas('SELECT * FROM badge_types WHERE id = 1915 LIMIT 10'); select * from temptable;
+SELECT for_all_schemas('SELECT badge_types.*, sites.name AS site_name FROM badge_types LEFT JOIN public.sites ON badge_types.site_id = public.sites.id LIMIT 10'); SELECT * FROM temptable;
 
 -- PERFORM for any statements that don't return anything
 -- can to cast results
