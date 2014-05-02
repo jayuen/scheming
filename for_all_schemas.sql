@@ -8,6 +8,7 @@ final_statement text;
 
   temptable_select text;
   temptable_selects text[];
+
 BEGIN
   -- kill temp tables
   DISCARD TEMP;
@@ -22,7 +23,7 @@ BEGIN
       || 'q.* FROM ('
 	    || raw_query
 	    || ') AS q';
-    EXECUTE 'SET search_path = ' || schema.schema_name;
+    EXECUTE 'SET search_path = ' || schema.schema_name || ', public';
     EXECUTE final_statement;
   END LOOP;
 
@@ -40,7 +41,7 @@ END;$$ LANGUAGE plpgsql;
 
 -- example usage
 SELECT for_all_schemas('SELECT * FROM badge_types WHERE id = 1915 LIMIT 10'); select * from temptable;
-SELECT for_all_schemas('SELECT badge_types.*, sites.name AS site_name FROM badge_types LEFT JOIN public.sites ON badge_types.site_id = public.sites.id LIMIT 10'); SELECT * FROM temptable;
+SELECT for_all_schemas('SELECT badge_types.*, sites.name AS site_name FROM badge_types LEFT JOIN sites ON badge_types.site_id = sites.id LIMIT 10'); SELECT * FROM temptable;
 
 -- PERFORM for any statements that don't return anything
 -- can to cast results
